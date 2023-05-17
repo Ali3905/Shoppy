@@ -7,12 +7,36 @@ import Typography from '@mui/material/Typography';
 import { Button, CardActionArea, CardActions, CircularProgress, Box, Modal, MenuItem} from '@mui/material';
 import { AiOutlinePlus, AiOutlineMinus } from 'react-icons/ai';
 import "../css/products.css"
+import { ordersData, contextMenuItems, ordersGrid } from '../data/dummy';
+import { GridComponent, ColumnsDirective, ColumnDirective, Resize, Sort, ContextMenu, Filter, Page, ExcelExport, PdfExport, Edit, Inject } from '@syncfusion/ej2-react-grids';
+import { Header } from '../components';
+import Table from '@mui/material/Table';
+import TableBody from '@mui/material/TableBody';
+import TableCell from '@mui/material/TableCell';
+import TableContainer from '@mui/material/TableContainer';
+import TableHead from '@mui/material/TableHead';
+import TableRow from '@mui/material/TableRow';
+import Paper from '@mui/material/Paper';
+
+function createData(name, calories, fat, carbs, protein) {
+  return { name, calories, fat, carbs, protein };
+}
+
+const rows = [
+  createData('Frozen yoghurt', 159, 6.0, 24, 4.0),
+  createData('Ice cream sandwich', 237, 9.0, 37, 4.3),
+  createData('Eclair', 262, 16.0, 24, 6.0),
+  createData('Cupcake', 305, 3.7, 67, 4.3),
+  createData('Gingerbread', 356, 16.0, 49, 3.9),
+];
 
 const Products = () => {
   const [products, setProducts] = useState([])
   const [indexOfCard, setIndexOfCard] = useState(0)
   const [openModal, setOpenModal] = useState(false)
   const [quantity, setQuantity] = useState(1)
+  const [cart, setCart] = useState([])
+  const editing = { allowDeleting: true, allowEditing: true };
   const getAllProducts = async() => {
     // e.preventDefault()
     // const { userName, password } = creds
@@ -25,17 +49,21 @@ const Products = () => {
   }
 
 
-  const handleBuy = async(price) => {
+  const handleBuy = async() => {
    const res = await axios({
       method: 'post',
       url: `https://bnbdevelopers-test-apis.vercel.app/handlePayment`,
       data: { total_amount: price }
     });
     console.log(res.data)
-    setQuantity(1)
-    if(res.data.msg === "Amount Updated"){
+    price = 0
+  }
+
+  const handleAddToCart = async(product) => {
+      cart.unshift(product)
       setOpenModal(false)
-    }
+      setQuantity(1)
+      console.log(cart);
   }
 
   const handleBtnClicked = (i) => {
@@ -61,6 +89,16 @@ const Products = () => {
     boxShadow: 24,
     p: 4,
   };
+
+  const rows = [
+    createData('Frozen yoghurt', 159, 6.0, 24, 4.0),
+    createData('Ice cream sandwich', 237, 9.0, 37, 4.3),
+    createData('Eclair', 262, 16.0, 24, 6.0),
+    createData('Cupcake', 305, 3.7, 67, 4.3),
+    createData('Gingerbread', 356, 16.0, 49, 3.9),
+  ];
+
+  var price = 0
   
   useEffect(()=>{
     getAllProducts()
@@ -92,7 +130,7 @@ const Products = () => {
       </CardActionArea>
       <CardActions>
         <Button size="medium" color="primary" className='btn' variant="contained" onClick={()=>handleBtnClicked(i)}>
-          Buy Now
+          Add to Cart 
         </Button>
       </CardActions>
     </Card>
@@ -149,13 +187,100 @@ const Products = () => {
         {products[indexOfCard].productPrice * quantity}
           </Typography>
           </div>
-        <Button size="medium" color="primary" className='btn' variant="contained" onClick={()=>handleBuy(products[indexOfCard].productPrice * quantity)}>
-          Buy Now
+        <Button size="medium" color="primary" className='btn' variant="contained" onClick={()=>handleAddToCart({
+          pic_url: products[indexOfCard].pic_url,
+          productName: products[indexOfCard].productName,
+          productPrice: products[indexOfCard].productPrice,
+          productTotalPrice: products[indexOfCard].productPrice * quantity,
+          quantity: quantity, 
+        })}>
+        Add to Cart
         </Button>
       </CardActions>
     </Card>
         </Box>
       </Modal>}
+     {cart.length !== 0 && <div>
+     <h2 className='ml-2'>Orders</h2>
+    <TableContainer component={Paper}>
+        <Table arial-aria-label='simple table' stickyHeader>
+            <TableHead  >
+                <TableRow>
+                <TableCell>Product Name</TableCell>
+                <TableCell align="left">Picture</TableCell>
+                <TableCell align="center">Price</TableCell>
+                <TableCell align="center">Quantity</TableCell>
+                <TableCell align="center">Total Price</TableCell>
+                </TableRow>
+            </TableHead>
+            <TableBody>
+                    {cart.map((ele, i)=>{
+                      price += ele.productTotalPrice
+                           return <TableRow
+                            key={i}
+                            sx={{"&:last-child td, &:last-child th": {border: 0}}}
+                            >
+                                {/* <TableCell sx={{: 200}} align='center'>{.id}</TableCell> */}
+                                
+                                <TableCell align='left'>{ele.productName}</TableCell>
+                                <TableCell align='left'>{}</TableCell>
+                                <TableCell align='center'>{ele.productPrice}</TableCell>
+                                <TableCell align='center'>{ele.quantity}</TableCell>
+                                <TableCell align='center'>{ele.productTotalPrice}</TableCell>
+                            </TableRow>
+                        })
+                    }
+            </TableBody>
+        </Table>
+        <div className='ml-2'>
+      <Typography gutterBottom variant="h4" component="div" textAlign={'left'}>
+        Total Price <strong>{price}</strong>
+          </Typography>
+      <Button size="medium" color="primary" className='btn' variant="contained" onClick={handleBuy}>
+          Buy Now
+        </Button>
+      </div>
+    </TableContainer>
+     </div>}
+
+      {/* <TableContainer component={Paper}>
+      <Table sx={{ minWidth: 650 }} aria-label="simple table">
+        <TableHead>
+          <TableRow>
+            <TableCell>Product Name</TableCell>
+            <TableCell align="left">Picture</TableCell>
+            <TableCell align="left">Price</TableCell>
+            <TableCell align="left">Quantity</TableCell>
+            <TableCell align="left">Total Price</TableCell>
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          
+          {cart.map((ele, i) => (
+            <TableRow
+              key={i}
+              sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+            >
+              <TableCell component="th" scope="row">
+                {ele.productName}
+              </TableCell>
+              <TableCell align="left">{ele.productName}</TableCell>
+              <TableCell align="left">{ele.productName}</TableCell>
+              <TableCell align="left">{ele.productName}</TableCell>
+              <TableCell align="left">{ele.productName}</TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
+      <div className='ml-2'>
+      <Typography gutterBottom variant="h4" component="div" textAlign={'left'}>
+        Total Price <h4>{price}</h4>
+          </Typography>
+      <Button size="medium" color="primary" className='btn' variant="contained" >
+          Buy Now
+        </Button>
+      </div>
+    </TableContainer> */}
     </>
   )
 }
