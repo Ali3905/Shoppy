@@ -1,0 +1,9 @@
+.card_img {
+    width: 10rem !important;
+    margin: auto;
+}
+
+.card_container{
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+}
