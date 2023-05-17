@@ -223,7 +223,9 @@ const Products = () => {
                                 {/* <TableCell sx={{: 200}} align='center'>{.id}</TableCell> */}
                                 
                                 <TableCell align='left'>{ele.productName}</TableCell>
-                                <TableCell align='left'>{}</TableCell>
+                                <TableCell align='left'>
+                                  <img src={ele.pic_url} alt="product" className='table_img'/>
+                                </TableCell>
                                 <TableCell align='center'>{ele.productPrice}</TableCell>
                                 <TableCell align='center'>{ele.quantity}</TableCell>
                                 <TableCell align='center'>{ele.productTotalPrice}</TableCell>
