@@ -4,7 +4,7 @@ import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
-import { Button, CardActionArea, CardActions } from '@mui/material';
+import { Button, CardActionArea, CardActions, CircularProgress } from '@mui/material';
 import "../css/products.css"
 
 const Products = () => {
@@ -25,7 +25,11 @@ const Products = () => {
   },[])
   return (
     <>
+    <div className='loader_container'> 
+    {products.length === 0 &&  <CircularProgress />}
+    </div>
     <div className="card_container">
+
     {products.length !== 0 &&  products.map((ele, i)=>{
 
      return <Card sx={{ maxWidth: 345, display: 'flex', flexDirection: 'column', alignItems: 'center', padding: "2rem 0rem", margin: "1rem 1rem" }} key={ele.i}>
@@ -46,7 +50,7 @@ const Products = () => {
       </CardActionArea>
       <CardActions>
         <Button size="medium" color="primary" className='btn' variant="contained">
-          Add to Cart
+          Buy Now
         </Button>
       </CardActions>
     </Card>

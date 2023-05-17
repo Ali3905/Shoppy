@@ -114,6 +114,7 @@ const AddProduct = () => {
               fullWidth
               variant="contained"
               sx={{ mt: 3, mb: 2 }}
+              disabled={creds.productName.length === 0 || creds.productPrice.length === 0 ? true : false}
             >
               Add Product
             </Button>

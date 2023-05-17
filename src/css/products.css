@@ -6,4 +6,10 @@
 .card_container{
     display: grid;
     grid-template-columns: repeat(3, 1fr);
+    
+}
+
+.loader_container{
+    display: flex;
+    justify-content: center;
 }
