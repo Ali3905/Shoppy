@@ -1,6 +1,8 @@
 import React from 'react';
 import { AiOutlineCalendar, AiOutlineShoppingCart, AiOutlineAreaChart, AiOutlineBarChart, AiOutlineStock } from 'react-icons/ai';
 import { FiShoppingBag, FiEdit, FiPieChart, FiBarChart, FiCreditCard, FiStar, FiShoppingCart } from 'react-icons/fi';
+import AddIcon from '@mui/icons-material/Add';
+import StoreIcon from '@mui/icons-material/Store';
 import { BsKanban, BsBarChart, BsBoxSeam, BsCurrencyDollar, BsShield, BsChatLeft } from 'react-icons/bs';
 import { BiColorFill } from 'react-icons/bi';
 import { IoMdContacts } from 'react-icons/io';
@@ -497,11 +499,11 @@ export const links = [
       },
       {
         name: 'addProduct',
-        icon: <RiContactsLine />,
+        icon: <AddIcon />,
       },
       {
         name: 'products',
-        icon: <RiContactsLine />,
+        icon: <StoreIcon />,
       },
     ],
   },
