@@ -48,6 +48,7 @@ const LoginPage = () => {
           await localStorage.setItem("token", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7I…U5NH0.ryE009ATv5POgo2_jW3ApeB8MoYb6MYUnu_J_2RSXZE")
           navigate('/')
           localStorage.setItem("role", creds.role)
+          localStorage.setItem("balance", res.data.details.balance)
           localStorage.setItem("rfid", res.data.details.rfid)
     }else{
       toast.error(`Login Failed`, {
