@@ -15,6 +15,10 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { useNavigate } from 'react-router-dom';
+import Radio from '@mui/material/Radio';
+import RadioGroup from '@mui/material/RadioGroup';
+import FormControl from '@mui/material/FormControl';
+import FormLabel from '@mui/material/FormLabel';
 
 const SignupPage = () => {
     
@@ -24,6 +28,7 @@ const SignupPage = () => {
         phone : '',
         password : '',
         rfid: '',
+        role: '',
     })
     const navigate = useNavigate()
 
@@ -31,47 +36,85 @@ const SignupPage = () => {
     const handleSubmit = async(event) => {
         event.preventDefault();
         const { userName, email, phone, password, rfid } = creds
-        const res = await axios({
-        method: 'post',
-        url: `https://bnbdevelopers-test-apis.vercel.app/addClient`,
-        data: { 
-            usrnme: userName,
-            email: email,
-            phone: phone,
-            pwd: password,
-            rfid: rfid,
-         },
-      });
-        console.log(res);
-        if(res.data.isSuccess === "True"){
-          setCreds({
-              userName : '',
-              email : '',
-              phone : '',
-              password : '',
-              rfid : '',
-          })
-          
-          navigate('/')
-
-        }else{
-          toast.error(`${res.data.msg}`, {
-            position: "top-center",
-            autoClose: 1000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-            theme: "colored",
-            });
+        if(creds.role === "client"){
+          const res = await axios({
+            method: 'post',
+            url: `https://bnbdevelopers-test-apis.vercel.app/addClient`,
+            data: { 
+                usrnme: userName,
+                email: email,
+                phone: phone,
+                pwd: password,
+                rfid: rfid,
+             },
+          });
+            console.log(res);
+            if(res.data.isSuccess === "True"){
+              setCreds({
+                  userName : '',
+                  email : '',
+                  phone : '',
+                  password : '',
+                  rfid : '',
+              })
+              await localStorage.setItem("token", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7I…U5NH0.ryE009ATv5POgo2_jW3ApeB8MoYb6MYUnu_J_2RSXZE")
+              navigate('/')
+              localStorage.setItem("role", creds.role)
+            }else{
+              toast.error(`${res.data.msg}`, {
+                position: "top-right",
+                autoClose: 1000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "colored",
+                });
+            }
+        }else if(creds.role === "admin"){
+          const res = await axios({
+            method: 'post',
+            url: `https://bnbdevelopers-test-apis.vercel.app/addAdmin`,
+            data: { 
+                usrnme: userName,
+                email: email,
+                phone: phone,
+                pwd: password,
+             },
+          });
+            console.log(res);
+            if(res.data.isSuccess === "True"){
+              setCreds({
+                  userName : '',
+                  email : '',
+                  phone : '',
+                  password : '',
+                  rfid : '',
+              })
+              await localStorage.setItem("token", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7I…U5NH0.ryE009ATv5POgo2_jW3ApeB8MoYb6MYUnu_J_2RSXZE")
+              navigate('/')
+              localStorage.setItem("role", creds.role)
+            }else{
+              toast.error(`${res.data.msg}`, {
+                position: "top-right",
+                autoClose: 1000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "colored",
+                });
+            }
         }
+        
       };
   return (
     <>
 
       <ToastContainer
-      position="top-center"
+      position="top-right"
       autoClose={1000}
       hideProgressBar={false}
       newestOnTop={false}
@@ -100,6 +143,22 @@ const SignupPage = () => {
           <Typography component="h1" variant="h5">
             Sign up
           </Typography>
+          <div className='radio_container'>
+          <FormControl>
+          <FormLabel id="demo-controlled-radio-buttons-group">Role</FormLabel>
+          <RadioGroup
+            aria-labelledby="demo-controlled-radio-buttons-group"
+            name="controlled-radio-buttons-group"
+            value={creds.role}
+              onChange={(e)=> setCreds({...creds, role:e.target.value})}
+          >
+            <div className='radio'>
+            <FormControlLabel value="admin" control={<Radio />} label="Admin" />
+            <FormControlLabel value="client" control={<Radio />} label="Client" />
+            </div>
+          </RadioGroup>
+        </FormControl>
+        </div>
           <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
             <Grid container spacing={2}>
               <Grid item xs={12}>
@@ -154,7 +213,7 @@ const SignupPage = () => {
                   onChange={(e)=> setCreds({...creds, password:e.target.value})}
                 />
               </Grid>
-              <Grid item xs={12}>
+              {creds.role === "client" &&<Grid item xs={12}>
                 <TextField
                   required
                   fullWidth
@@ -166,7 +225,7 @@ const SignupPage = () => {
                   value={creds.rfid}
                   onChange={(e)=> setCreds({...creds, rfid:e.target.value})}
                 />
-              </Grid>
+              </Grid>}
               <Grid item xs={12}>
                 <FormControlLabel
                   control={<Checkbox value="allowExtraEmails" color="primary" />}
@@ -179,6 +238,12 @@ const SignupPage = () => {
               fullWidth
               variant="contained"
               sx={{ mt: 3, mb: 2 }}
+              disabled={
+                creds.role === 'client'?
+                creds.userName === '' || creds.email === '' || creds.phone === '' || creds.password === '' || creds.rfid === '' ? true : false:
+                creds.userName === '' || creds.email === '' || creds.phone === '' || creds.password === ''  ? true : false
+                
+              }
             >
               Sign Up
             </Button>

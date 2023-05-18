@@ -11,6 +11,7 @@ const UserProfile = () => {
   const navigate = useNavigate();
   const { currentColor } = useStateContext();
   const handleLogout = () => {
+    localStorage.removeItem("token")
     navigate('/login')
   }
 

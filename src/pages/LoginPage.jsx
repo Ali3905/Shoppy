@@ -16,17 +16,23 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { useNavigate } from 'react-router-dom';
+import Radio from '@mui/material/Radio';
+import RadioGroup from '@mui/material/RadioGroup';
+import FormControl from '@mui/material/FormControl';
+import FormLabel from '@mui/material/FormLabel';
 
 const LoginPage = () => {
 
     const [ creds, setCreds ] = useState({
         userName: '',
         password: '',
+        role: '',
     })
     const navigate = useNavigate()
 
     const theme = createTheme();
     const handleSubmit = async(event) => {
+      if(creds.role === "client"){
         event.preventDefault();
         const { userName, password } = creds
         const res = await axios({
@@ -39,22 +45,54 @@ const LoginPage = () => {
             userName : '',
             password : '',
           })
-        //   toast.success('Logged in SuccessFully', {
-        //     position: "top-center",
-        //     autoClose: 3000,
-        //     hideProgressBar: false,
-        //     closeOnClick: true,
-        //     pauseOnHover: true,
-        //     draggable: true,
-        //     progress: undefined,
-        //     theme: "colored",
-        //     });
+          await localStorage.setItem("token", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7I…U5NH0.ryE009ATv5POgo2_jW3ApeB8MoYb6MYUnu_J_2RSXZE")
           navigate('/')
+          localStorage.setItem("role", creds.role)
+          localStorage.setItem("rfid", res.data.details.rfid)
+    }else{
+      toast.error(`Login Failed`, {
+        position: "top-right",
+        autoClose: 1000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+        });
+    }}else if(creds.role === "admin"){
+      event.preventDefault();
+        const { userName, password } = creds
+        const res = await axios({
+        method: 'get',
+        url: `https://bnbdevelopers-test-apis.vercel.app/signInAdmin?usrnme=${userName}&pwd=${password}`,
+      });
+      console.log(res)
+    if(res.data.isSuccess === "True"){
+        setCreds({
+            userName : '',
+            password : '',
+          })
+          await localStorage.setItem("token", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7I…U5NH0.ryE009ATv5POgo2_jW3ApeB8MoYb6MYUnu_J_2RSXZE")
+          navigate('/')
+          localStorage.setItem("role", creds.role)
+    }else{
+      toast.error(`Login Failed`, {
+        position: "top-right",
+        autoClose: 1000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+        });
+    }
     }
       };
   return (
     <>
-       {/* <ToastContainer
+       <ToastContainer
       position="top-center"
       autoClose={3000}
       hideProgressBar={false}
@@ -65,9 +103,10 @@ const LoginPage = () => {
       draggable
       pauseOnHover
       theme="colored"
-      /> */}
+      />
 
       <ThemeProvider theme={theme}>
+       
       <Container component="main" maxWidth="xs">
         <CssBaseline />
         <Box
@@ -84,6 +123,22 @@ const LoginPage = () => {
           <Typography component="h1" variant="h5">
             Sign in
           </Typography>
+          <div className='radio_container'>
+          <FormControl>
+          <FormLabel id="demo-controlled-radio-buttons-group">Role</FormLabel>
+          <RadioGroup
+            aria-labelledby="demo-controlled-radio-buttons-group"
+            name="controlled-radio-buttons-group"
+            value={creds.role}
+              onChange={(e)=> setCreds({...creds, role:e.target.value})}
+          >
+            <div className='radio'>
+            <FormControlLabel value="admin" control={<Radio />} label="Admin" />
+            <FormControlLabel value="client" control={<Radio />} label="Client" />
+            </div>
+          </RadioGroup>
+        </FormControl>
+        </div>
           <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
             <TextField
               margin="normal"

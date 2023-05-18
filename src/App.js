@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, useNavigate } from 'react-router-dom';
 import { FiSettings } from 'react-icons/fi';
 import { TooltipComponent } from '@syncfusion/ej2-react-popups';
 
@@ -13,6 +13,9 @@ import { useStateContext } from './contexts/ContextProvider';
 import LoginPage from './pages/LoginPage';
 import Products from './pages/Products';
 import AddProduct from './pages/AddProduct';
+import AddClient from './pages/AddClient';
+import UserDashBoardPage from './pages/UserDashboardPage'
+import AddBalance from './pages/AddBalance';
 
 const App = () => {
   const { setCurrentColor, setCurrentMode, currentMode, activeMenu, currentColor, themeSettings, setThemeSettings } = useStateContext();
@@ -25,6 +28,8 @@ const App = () => {
       setCurrentMode(currentThemeMode);
     }
   }, []);
+
+ 
 
   return (
     <div className={currentMode === 'Dark' ? 'dark' : ''}>
@@ -70,17 +75,20 @@ const App = () => {
 
               <Routes>
                 {/* dashboard  */}
-                <Route path="/" element={(<Ecommerce />)} />
-                <Route path="/ecommerce" element={(<Ecommerce />)} />
+                {<Route path="/" element={localStorage.getItem("role")==="admin"?<Ecommerce /> : <UserDashBoardPage /> } />}
+                <Route path="/ecommerce" element={localStorage.getItem("role")==="admin"?<Ecommerce /> : null} />
 
                 {/* pages  */}
-                <Route path="/orders" element={<Orders />} />
-                <Route path="/employees" element={<Employees />} />
-                <Route path="/customers" element={<Customers />} />
+                <Route path="/orders" element={localStorage.getItem("role")==="admin"?<Orders /> : null} />
+                <Route path="/addClient" element={localStorage.getItem("role")==="admin"?<AddClient /> : null} />
+                <Route path="/clients" element={localStorage.getItem("role")==="admin"?<Customers /> : null} />
                 <Route path="/signup" element={<SignupPage />} />
                 <Route path="/login" element={<LoginPage />} />
-                <Route path="/products" element={<Products />} />
-                <Route path="/addproduct" element={<AddProduct />} />
+                <Route path="/products" element={localStorage.getItem("role")==="admin"?<Products /> : null}/>
+                <Route path="/addproduct" element={localStorage.getItem("role")==="admin"?<AddProduct /> : null}/>
+
+                <Route path="/userDashboard" element={localStorage.getItem("role")==="admin"? null : <UserDashBoardPage />}/>
+                <Route path="/addBalance" element={localStorage.getItem("role")==="admin"? null : <AddBalance />}/>
               
 
               </Routes>

@@ -3,6 +3,7 @@ import { AiOutlineCalendar, AiOutlineShoppingCart, AiOutlineAreaChart, AiOutline
 import { FiShoppingBag, FiEdit, FiPieChart, FiBarChart, FiCreditCard, FiStar, FiShoppingCart } from 'react-icons/fi';
 import AddIcon from '@mui/icons-material/Add';
 import StoreIcon from '@mui/icons-material/Store';
+import PersonAddAltIcon from '@mui/icons-material/PersonAddAlt';
 import { BsKanban, BsBarChart, BsBoxSeam, BsCurrencyDollar, BsShield, BsChatLeft } from 'react-icons/bs';
 import { BiColorFill } from 'react-icons/bi';
 import { IoMdContacts } from 'react-icons/io';
@@ -475,26 +476,29 @@ export const links = [
   {
     title: 'Dashboard',
     links: [
-      {
+      localStorage.getItem("role")==="admin"?{
         name: 'ecommerce',
         icon: <FiShoppingBag />,
-      },
+      }:  {
+        name: 'userDashboard',
+        icon: <FiShoppingBag />,
+      } ,
     ],
   },
 
   {
     title: 'Pages',
-    links: [
+    links: localStorage.getItem("role")==="admin"? [
       {
         name: 'orders',
         icon: <AiOutlineShoppingCart />,
       },
       {
-        name: 'employees',
-        icon: <IoMdContacts />,
+        name: 'addClient',
+        icon: <PersonAddAltIcon />,
       },
       {
-        name: 'customers',
+        name: 'clients',
         icon: <RiContactsLine />,
       },
       {
@@ -505,7 +509,12 @@ export const links = [
         name: 'products',
         icon: <StoreIcon />,
       },
-    ],
+    ]: [
+      {
+        name: 'addBalance',
+        icon: <AddIcon />,
+      },
+    ]
   },
   
   
@@ -517,21 +526,21 @@ export const cartData = [
       product5,
     name: 'butterscotch ice-cream',
     category: 'Milk product',
-    price: '$250',
+    price: 'Rs 250',
   },
   {
     image:
       product6,
     name: 'Supreme fresh tomato',
     category: 'Vegetable Item',
-    price: '$450',
+    price: 'Rs 450',
   },
   {
     image:
       product7,
     name: 'Red color candy',
     category: 'Food Item',
-    price: '$190',
+    price: 'Rs 190',
   },
 ];
 
@@ -609,7 +618,7 @@ export const earningData = [
 export const recentTransactions = [
   {
     icon: <BsCurrencyDollar />,
-    amount: '+$350',
+    amount: '+Rs 350',
     title: 'Paypal Transfer',
     desc: 'Money Added',
     iconColor: '#03C9D7',
@@ -618,7 +627,7 @@ export const recentTransactions = [
   },
   {
     icon: <BsShield />,
-    amount: '-$560',
+    amount: '-Rs 560',
     desc: 'Bill Payment',
     title: 'Wallet',
     iconColor: 'rgb(0, 194, 146)',
@@ -627,7 +636,7 @@ export const recentTransactions = [
   },
   {
     icon: <FiCreditCard />,
-    amount: '+$350',
+    amount: '+Rs 350',
     title: 'Credit Card',
     desc: 'Money reversed',
     iconColor: 'rgb(255, 244, 229)',
@@ -637,7 +646,7 @@ export const recentTransactions = [
   },
   {
     icon: <TiTick />,
-    amount: '+$350',
+    amount: '+Rs 350',
     title: 'Bank Transfer',
     desc: 'Money Added',
 
@@ -647,7 +656,7 @@ export const recentTransactions = [
   },
   {
     icon: <BsCurrencyDollar />,
-    amount: '-$50',
+    amount: '-Rs 50',
     percentage: '+38%',
     title: 'Refund',
     desc: 'Payment Sent',
@@ -660,7 +669,7 @@ export const recentTransactions = [
 export const weeklyStats = [
   {
     icon: <FiShoppingCart />,
-    amount: '-$560',
+    amount: '-Rs 560',
     title: 'Top Sales',
     desc: 'Johnathan Doe',
     iconBg: '#FB9678',
@@ -668,7 +677,7 @@ export const weeklyStats = [
   },
   {
     icon: <FiStar />,
-    amount: '-$560',
+    amount: '-Rs 560',
     title: 'Best Seller',
     desc: 'MaterialPro Admin',
     iconBg: 'rgb(254, 201, 15)',
@@ -676,7 +685,7 @@ export const weeklyStats = [
   },
   {
     icon: <BsChatLeft />,
-    amount: '+$560',
+    amount: '+Rs 560',
     title: 'Most Commented',
     desc: 'Ample Admin',
     iconBg: '#00C292',
@@ -692,7 +701,7 @@ export const productsPerformance = [
     desc: 'Ice-Cream, Milk, Powder',
     rating: 'Good',
     itemSold: '65%',
-    earningAmount: '$546,000',
+    earningAmount: 'Rs 546,000',
   },
   {
     image:
@@ -701,7 +710,7 @@ export const productsPerformance = [
     desc: 'Market, Mall',
     rating: 'Excellent',
     itemSold: '98%',
-    earningAmount: '$780,000',
+    earningAmount: 'Rs 780,000',
   },
   {
     image:
@@ -710,7 +719,7 @@ export const productsPerformance = [
     desc: 'Chocolate, Yummy',
     rating: 'Average',
     itemSold: '46%',
-    earningAmount: '$457,000',
+    earningAmount: 'Rs 457,000',
   },
   {
     image:
@@ -719,7 +728,7 @@ export const productsPerformance = [
     desc: 'Electric, Wire, Current',
     rating: 'Poor',
     itemSold: '23%',
-    earningAmount: '$123,000',
+    earningAmount: 'Rs 123,000',
   },
 ];
 
@@ -731,11 +740,11 @@ export const medicalproBranding = {
     },
     {
       title: 'Budget',
-      desc: '$98,500',
+      desc: 'Rs 98,500',
     },
     {
       title: 'Expense',
-      desc: '$63,000',
+      desc: 'Rs 63,000',
     },
   ],
   teams: [
@@ -883,7 +892,7 @@ export const customersData = [
     Status: 'Active',
     StatusBg: '#8BE78B',
     Weeks: '40',
-    Budget: '$2.4k',
+    Budget: 'Rs 2.4k',
     Location: 'India',
   },
   {
@@ -898,7 +907,7 @@ export const customersData = [
 
     StatusBg: '#8BE78B',
     Weeks: '11',
-    Budget: '$3.9k',
+    Budget: 'Rs 3.9k',
     Location: 'India',
   },
   {
@@ -912,7 +921,7 @@ export const customersData = [
       avatar4,
     StatusBg: '#FEC90F',
     Weeks: '19',
-    Budget: '$24.5k',
+    Budget: 'Rs 24.5k',
     Location: 'USA',
   },
   {
@@ -926,7 +935,7 @@ export const customersData = [
       avatar,
     StatusBg: '#8BE78B',
     Weeks: '34',
-    Budget: '$16.5k',
+    Budget: 'Rs 16.5k',
     Location: 'USA',
   },
   {
@@ -940,7 +949,7 @@ export const customersData = [
       avatar2,
     StatusBg: 'red',
     Weeks: '34',
-    Budget: '$16.5k',
+    Budget: 'Rs 16.5k',
     Location: 'USA',
   },
   {
@@ -953,7 +962,7 @@ export const customersData = [
     Status: 'Active',
     StatusBg: '#8BE78B',
     Weeks: '40',
-    Budget: '$2.4k',
+    Budget: 'Rs 2.4k',
     Location: 'India',
   },
   {
@@ -968,7 +977,7 @@ export const customersData = [
 
     StatusBg: '#8BE78B',
     Weeks: '11',
-    Budget: '$3.9k',
+    Budget: 'Rs 3.9k',
     Location: 'India',
   },
   {
@@ -982,7 +991,7 @@ export const customersData = [
       avatar4,
     StatusBg: '#FEC90F',
     Weeks: '19',
-    Budget: '$24.5k',
+    Budget: 'Rs 24.5k',
     Location: 'USA',
   },
   {
@@ -996,7 +1005,7 @@ export const customersData = [
       avatar,
     StatusBg: '#8BE78B',
     Weeks: '34',
-    Budget: '$16.5k',
+    Budget: 'Rs 16.5k',
     Location: 'USA',
   },
   {
@@ -1010,7 +1019,7 @@ export const customersData = [
       avatar2,
     StatusBg: 'red',
     Weeks: '34',
-    Budget: '$16.5k',
+    Budget: 'Rs 16.5k',
     Location: 'USA',
   },
   {
@@ -1023,7 +1032,7 @@ export const customersData = [
     Status: 'Active',
     StatusBg: '#8BE78B',
     Weeks: '40',
-    Budget: '$2.4k',
+    Budget: 'Rs 2.4k',
     Location: 'India',
   },
   {
@@ -1038,7 +1047,7 @@ export const customersData = [
 
     StatusBg: '#8BE78B',
     Weeks: '11',
-    Budget: '$3.9k',
+    Budget: 'Rs 3.9k',
     Location: 'India',
   },
   {
@@ -1052,7 +1061,7 @@ export const customersData = [
       avatar4,
     StatusBg: '#FEC90F',
     Weeks: '19',
-    Budget: '$24.5k',
+    Budget: 'Rs 24.5k',
     Location: 'USA',
   },
   {
@@ -1066,7 +1075,7 @@ export const customersData = [
       avatar,
     StatusBg: '#8BE78B',
     Weeks: '34',
-    Budget: '$16.5k',
+    Budget: 'Rs 16.5k',
     Location: 'USA',
   },
   {
@@ -1080,7 +1089,7 @@ export const customersData = [
       avatar2,
     StatusBg: 'red',
     Weeks: '34',
-    Budget: '$16.5k',
+    Budget: 'Rs 16.5k',
     Location: 'USA',
   },
   {
@@ -1093,7 +1102,7 @@ export const customersData = [
     Status: 'Active',
     StatusBg: '#8BE78B',
     Weeks: '40',
-    Budget: '$2.4k',
+    Budget: 'Rs 2.4k',
     Location: 'India',
   },
   {
@@ -1108,7 +1117,7 @@ export const customersData = [
 
     StatusBg: '#8BE78B',
     Weeks: '11',
-    Budget: '$3.9k',
+    Budget: 'Rs 3.9k',
     Location: 'India',
   },
   {
@@ -1122,7 +1131,7 @@ export const customersData = [
       avatar4,
     StatusBg: '#FEC90F',
     Weeks: '19',
-    Budget: '$24.5k',
+    Budget: 'Rs 24.5k',
     Location: 'USA',
   },
   {
@@ -1136,7 +1145,7 @@ export const customersData = [
       avatar,
     StatusBg: '#8BE78B',
     Weeks: '34',
-    Budget: '$16.5k',
+    Budget: 'Rs 16.5k',
     Location: 'USA',
   },
   {
@@ -1150,7 +1159,7 @@ export const customersData = [
       avatar2,
     StatusBg: 'red',
     Weeks: '34',
-    Budget: '$16.5k',
+    Budget: 'Rs 16.5k',
     Location: 'USA',
   },
   {
@@ -1163,7 +1172,7 @@ export const customersData = [
     Status: 'Active',
     StatusBg: '#8BE78B',
     Weeks: '40',
-    Budget: '$2.4k',
+    Budget: 'Rs 2.4k',
     Location: 'India',
   },
   {
@@ -1178,7 +1187,7 @@ export const customersData = [
 
     StatusBg: '#8BE78B',
     Weeks: '11',
-    Budget: '$3.9k',
+    Budget: 'Rs 3.9k',
     Location: 'India',
   },
   {
@@ -1192,7 +1201,7 @@ export const customersData = [
       avatar4,
     StatusBg: '#FEC90F',
     Weeks: '19',
-    Budget: '$24.5k',
+    Budget: 'Rs 24.5k',
     Location: 'USA',
   },
   {
@@ -1206,7 +1215,7 @@ export const customersData = [
       avatar,
     StatusBg: '#8BE78B',
     Weeks: '34',
-    Budget: '$16.5k',
+    Budget: 'Rs 16.5k',
     Location: 'USA',
   },
   {
@@ -1220,7 +1229,7 @@ export const customersData = [
       avatar2,
     StatusBg: 'red',
     Weeks: '34',
-    Budget: '$16.5k',
+    Budget: 'Rs 16.5k',
     Location: 'USA',
   },
   {
@@ -1233,7 +1242,7 @@ export const customersData = [
     Status: 'Active',
     StatusBg: '#8BE78B',
     Weeks: '40',
-    Budget: '$2.4k',
+    Budget: 'Rs 2.4k',
     Location: 'India',
   },
   {
@@ -1248,7 +1257,7 @@ export const customersData = [
 
     StatusBg: '#8BE78B',
     Weeks: '11',
-    Budget: '$3.9k',
+    Budget: 'Rs 3.9k',
     Location: 'India',
   },
   {
@@ -1262,7 +1271,7 @@ export const customersData = [
       avatar4,
     StatusBg: '#FEC90F',
     Weeks: '19',
-    Budget: '$24.5k',
+    Budget: 'Rs 24.5k',
     Location: 'USA',
   },
   {
@@ -1276,7 +1285,7 @@ export const customersData = [
       avatar,
     StatusBg: '#8BE78B',
     Weeks: '34',
-    Budget: '$16.5k',
+    Budget: 'Rs 16.5k',
     Location: 'USA',
   },
   {
@@ -1290,7 +1299,7 @@ export const customersData = [
       avatar2,
     StatusBg: 'red',
     Weeks: '34',
-    Budget: '$16.5k',
+    Budget: 'Rs 16.5k',
     Location: 'USA',
   },
   {
@@ -1303,7 +1312,7 @@ export const customersData = [
     Status: 'Active',
     StatusBg: '#8BE78B',
     Weeks: '40',
-    Budget: '$2.4k',
+    Budget: 'Rs 2.4k',
     Location: 'India',
   },
   {
@@ -1318,7 +1327,7 @@ export const customersData = [
 
     StatusBg: '#8BE78B',
     Weeks: '11',
-    Budget: '$3.9k',
+    Budget: 'Rs 3.9k',
     Location: 'India',
   },
   {
@@ -1332,7 +1341,7 @@ export const customersData = [
       avatar4,
     StatusBg: '#FEC90F',
     Weeks: '19',
-    Budget: '$24.5k',
+    Budget: 'Rs 24.5k',
     Location: 'USA',
   },
   {
@@ -1346,7 +1355,7 @@ export const customersData = [
       avatar,
     StatusBg: '#8BE78B',
     Weeks: '34',
-    Budget: '$16.5k',
+    Budget: 'Rs 16.5k',
     Location: 'USA',
   },
   {
@@ -1360,7 +1369,7 @@ export const customersData = [
       avatar2,
     StatusBg: 'red',
     Weeks: '34',
-    Budget: '$16.5k',
+    Budget: 'Rs 16.5k',
     Location: 'USA',
   },
   {
@@ -1373,7 +1382,7 @@ export const customersData = [
     Status: 'Active',
     StatusBg: '#8BE78B',
     Weeks: '40',
-    Budget: '$2.4k',
+    Budget: 'Rs 2.4k',
     Location: 'India',
   },
   {
@@ -1388,7 +1397,7 @@ export const customersData = [
 
     StatusBg: '#8BE78B',
     Weeks: '11',
-    Budget: '$3.9k',
+    Budget: 'Rs 3.9k',
     Location: 'India',
   },
   {
@@ -1402,7 +1411,7 @@ export const customersData = [
       avatar4,
     StatusBg: '#FEC90F',
     Weeks: '19',
-    Budget: '$24.5k',
+    Budget: 'Rs 24.5k',
     Location: 'USA',
   },
   {
@@ -1415,7 +1424,7 @@ export const customersData = [
       avatar,
     StatusBg: '#8BE78B',
     Weeks: '34',
-    Budget: '$16.5k',
+    Budget: 'Rs 16.5k',
     Location: 'USA',
   },
   {
@@ -1428,7 +1437,7 @@ export const customersData = [
       avatar2,
     StatusBg: 'red',
     Weeks: '34',
-    Budget: '$16.5k',
+    Budget: 'Rs 16.5k',
     Location: 'USA',
   },
 

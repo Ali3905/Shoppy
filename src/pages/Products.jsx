@@ -17,6 +17,8 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
+import { ToastContainer, toast } from 'react-toastify';
+import { useNavigate } from 'react-router-dom';
 
 function createData(name, calories, fat, carbs, protein) {
   return { name, calories, fat, carbs, protein };
@@ -31,6 +33,7 @@ const rows = [
 ];
 
 const Products = () => {
+  const navigate = useNavigate()
   const [products, setProducts] = useState([])
   const [indexOfCard, setIndexOfCard] = useState(0)
   const [openModal, setOpenModal] = useState(false)
@@ -57,6 +60,17 @@ const Products = () => {
     });
     console.log(res.data)
     price = 0
+    toast.success('Order Placed SuccessFully', {
+          position: "top-right",
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "colored",
+          });
+    setCart([])
   }
 
   const handleAddToCart = async(product) => {
@@ -90,21 +104,33 @@ const Products = () => {
     p: 4,
   };
 
-  const rows = [
-    createData('Frozen yoghurt', 159, 6.0, 24, 4.0),
-    createData('Ice cream sandwich', 237, 9.0, 37, 4.3),
-    createData('Eclair', 262, 16.0, 24, 6.0),
-    createData('Cupcake', 305, 3.7, 67, 4.3),
-    createData('Gingerbread', 356, 16.0, 49, 3.9),
-  ];
 
   var price = 0
   
   useEffect(()=>{
     getAllProducts()
   },[])
+
+  useEffect(() => {
+    if(!localStorage.getItem("token")){
+      navigate("/login")
+    }
+  }, [])
   return (
     <>
+    <ToastContainer
+      position="top-right"
+      autoClose={3000}
+      hideProgressBar={false}
+      newestOnTop={false}
+      closeOnClick
+      rtl={false}
+      pauseOnFocusLoss
+      draggable
+      pauseOnHover
+      theme="colored"
+      />
+
     <div className='loader_container'> 
     {products.length === 0 &&  <CircularProgress />}
     </div>
@@ -120,7 +146,7 @@ const Products = () => {
             {ele.productName}
           </Typography>
           <Typography gutterBottom variant="h5" component="div" textAlign={'center'}>
-            ${ele.productPrice}
+            Rs {ele.productPrice}
           </Typography>
           {/* <Typography variant="body1" color="text.secondary">
             Lizards are a widespread group of squamate reptiles, with over 6,000
@@ -152,7 +178,7 @@ const Products = () => {
             {products[indexOfCard].productName}
           </Typography>
           <Typography gutterBottom variant="h5" component="div" textAlign={'center'}>
-            $ {products[indexOfCard].productPrice}
+            Rs {products[indexOfCard].productPrice}
           </Typography>
       {/* <FormControl fullWidth>
         <InputLabel id="demo-simple-select-label">Age</InputLabel>
@@ -184,7 +210,7 @@ const Products = () => {
         </div>
         <div>
         <Typography gutterBottom variant="h5" component="div" textAlign={'center'}>
-        {products[indexOfCard].productPrice * quantity}
+        Rs {products[indexOfCard].productPrice * quantity}
           </Typography>
           </div>
         <Button size="medium" color="primary" className='btn' variant="contained" onClick={()=>handleAddToCart({
@@ -201,7 +227,7 @@ const Products = () => {
         </Box>
       </Modal>}
      {cart.length !== 0 && <div>
-     <h2 className='ml-2'>Orders</h2>
+     <h2 className='ml-2'>Cart</h2>
     <TableContainer component={Paper}>
         <Table arial-aria-label='simple table' stickyHeader>
             <TableHead  >
@@ -226,9 +252,9 @@ const Products = () => {
                                 <TableCell align='left'>
                                   <img src={ele.pic_url} alt="product" className='table_img'/>
                                 </TableCell>
-                                <TableCell align='center'>{ele.productPrice}</TableCell>
+                                <TableCell align='center'>Rs {ele.productPrice}</TableCell>
                                 <TableCell align='center'>{ele.quantity}</TableCell>
-                                <TableCell align='center'>{ele.productTotalPrice}</TableCell>
+                                <TableCell align='center'>Rs {ele.productTotalPrice}</TableCell>
                             </TableRow>
                         })
                     }
@@ -236,7 +262,7 @@ const Products = () => {
         </Table>
         <div className='ml-2'>
       <Typography gutterBottom variant="h4" component="div" textAlign={'left'}>
-        Total Price <strong>{price}</strong>
+        Total Price: <strong>Rs {price}</strong>
           </Typography>
       <Button size="medium" color="primary" className='btn' variant="contained" onClick={handleBuy}>
           Buy Now
