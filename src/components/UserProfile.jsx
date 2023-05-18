@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { MdOutlineCancel } from "react-icons/md";
 
 import { Button } from ".";
@@ -10,13 +10,29 @@ import { useNavigate } from "react-router-dom";
 const UserProfile = () => {
   const navigate = useNavigate();
   const { currentColor } = useStateContext();
+  const [name, setName] = useState('')
+  const [role, setRole] = useState('')
+  const [email, setEmail] = useState('')
+  const [pic, setPic] = useState('')
+
   const handleLogout = () => {
     localStorage.removeItem("token");
     localStorage.removeItem("role");
     localStorage.removeItem("balance");
     localStorage.removeItem("rfid");
+    localStorage.removeItem("name")
+    localStorage.removeItem("email")
+    localStorage.removeItem("role")
+  localStorage.removeItem("pic_url")
     navigate("/login");
   };
+
+  useEffect(()=>{
+    setName(localStorage.getItem("name"))
+    setEmail(localStorage.getItem("email"))
+    setRole(localStorage.getItem("role"))
+    setPic(localStorage.getItem("pic_url"))
+  },[])
 
   return (
     <div className="nav-item absolute right-1 top-16 bg-white dark:bg-[#42464D] p-8 rounded-lg w-96">
@@ -33,26 +49,26 @@ const UserProfile = () => {
       <div className="flex gap-5 items-center mt-6 border-color border-b-1 pb-6">
         <img
           className="rounded-full h-24 w-24"
-          src={avatar}
+          src={pic}
           alt="user-profile"
         />
         <div>
           <p className="font-semibold text-xl dark:text-gray-200">
             {" "}
-            Michael Roberts{" "}
+            {name} {" "}
           </p>
           <p className="text-gray-500 text-sm dark:text-gray-400">
             {" "}
-            Administrator{" "}
+            {role}{" "}
           </p>
           <p className="text-gray-500 text-sm font-semibold dark:text-gray-400">
             {" "}
-            info@shop.com{" "}
+            {email}{" "}
           </p>
         </div>
       </div>
       <div>
-        {userProfileData.map((item, index) => (
+        {/* {userProfileData.map((item, index) => (
           <div
             key={index}
             className="flex gap-5 border-b-1 border-color p-4 hover:bg-light-gray cursor-pointer  dark:hover:bg-[#42464D]"
@@ -73,7 +89,7 @@ const UserProfile = () => {
               </p>
             </div>
           </div>
-        ))}
+        ))} */}
       </div>
 
       <div className="mt-5" onClick={handleLogout}>

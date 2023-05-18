@@ -23,7 +23,7 @@ const UserDashboardPage = () => {
           {/* <Sidebar/> */}
           <div className='left_container'>
                 <div className='card_container1'>
-                <CardElement  sx={{backgroundColor: "##acffac"}} total={"Total Deposit"} total_deposit={localStorage.getItem("balance")} img={<img src="/img/img2.png" alt="" />}/>
+                <CardElement  sx={{backgroundColor: "##acffac"}} total={"Total Deposit"} total_deposit={localStorage.getItem("balance")===''|| localStorage.getItem("balance")===null? 0 : localStorage.getItem("balance")} img={<img src="/img/img2.png" alt="" />}/>
                 <CardElement  sx={{backgroundColor: "##acffac"}} total={"Spent"} total_deposit={500} img={<LocalAtmIcon sx={{backgroundColor: "##acffac", color: "green"}} className='card_icon'/>}/>
                 <CardElement  sx={{backgroundColor: "##acffac"}} total={"Remaining"} total_deposit={500} img={<AccountBalanceWalletIcon sx={{backgroundColor: "#a6a6ff" , color: "blue"}} className='card_icon'/>}/>
                 </div>   

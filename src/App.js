@@ -29,6 +29,10 @@ const App = () => {
     }
   }, []);
 
+  useEffect(() => {
+      localStorage.getItem("role")    
+  }, []);
+
  
 
   return (
@@ -53,11 +57,12 @@ const App = () => {
           </div>
           {activeMenu ? (
             <div className="w-72 fixed sidebar dark:bg-secondary-dark-bg bg-white ">
-              <Sidebar />
+              {localStorage.getItem("token") && <Sidebar />}
             </div>
           ) : (
             <div className="w-0 dark:bg-secondary-dark-bg">
-              <Sidebar />
+              {/* <Sidebar /> */}
+            {localStorage.getItem("token") && <Sidebar />}
             </div>
           )}
           <div
@@ -68,7 +73,7 @@ const App = () => {
             }
           >
             <div className="fixed md:static bg-main-bg dark:bg-main-dark-bg navbar w-full ">
-              <Navbar />
+              {localStorage.getItem("token") && <Navbar />}
             </div>
             <div>
               {themeSettings && (<ThemeSettings />)}
@@ -87,8 +92,8 @@ const App = () => {
                 <Route path="/products" element={localStorage.getItem("role")==="admin"?<Products /> : null}/>
                 <Route path="/addproduct" element={localStorage.getItem("role")==="admin"?<AddProduct /> : null}/>
 
-                <Route path="/userDashboard" element={localStorage.getItem("role")==="admin"? null : <UserDashBoardPage />}/>
-                <Route path="/addBalance" element={localStorage.getItem("role")==="admin"? null : <AddBalance />}/>
+                <Route path="/userDashboard" element={localStorage.getItem("role")==="client"? <UserDashBoardPage /> : null }/>
+                <Route path="/addBalance" element={localStorage.getItem("role")==="client"? <AddBalance /> : null}/>
               
 
               </Routes>

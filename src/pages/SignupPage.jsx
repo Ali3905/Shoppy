@@ -58,8 +58,13 @@ const SignupPage = () => {
                   rfid : '',
               })
               await localStorage.setItem("token", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7I…U5NH0.ryE009ATv5POgo2_jW3ApeB8MoYb6MYUnu_J_2RSXZE")
-              navigate('/')
-              localStorage.setItem("role", creds.role)
+              await localStorage.setItem("role", creds.role)
+              await localStorage.setItem("rfid", res.data.details.rfid)
+              await localStorage.setItem("name", res.data.details.usrnme)
+              await localStorage.setItem("email", res.data.details.email)
+              await localStorage.setItem("pic_url", res.data.details.pic_url)
+              navigate('/userDashboard')
+              window.location.reload();
             }else{
               toast.error(`${res.data.msg}`, {
                 position: "top-right",
@@ -93,8 +98,12 @@ const SignupPage = () => {
                   rfid : '',
               })
               await localStorage.setItem("token", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7I…U5NH0.ryE009ATv5POgo2_jW3ApeB8MoYb6MYUnu_J_2RSXZE")
-              navigate('/')
-              localStorage.setItem("role", creds.role)
+              await localStorage.setItem("role", creds.role)
+              await localStorage.setItem("name", res.data.details.usrnme)
+              await localStorage.setItem("email", res.data.details.email)
+              await localStorage.setItem("pic_url", res.data.details.pic_url)
+              navigate('/ecommerce')
+              window.location.reload();
             }else{
               toast.error(`${res.data.msg}`, {
                 position: "top-right",
@@ -126,7 +135,7 @@ const SignupPage = () => {
       theme="colored"
       />
       <ToastContainer />
-      <ThemeProvider theme={theme}>
+      <ThemeProvider theme={theme} margin={"0 0"}>
       <Container component="main" maxWidth="xs">
         <CssBaseline />
         <Box
