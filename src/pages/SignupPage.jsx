@@ -190,6 +190,7 @@ const SignupPage = () => {
                   id="email"
                   label="Email Address"
                   name="email"
+                  type="email"
                   autoComplete="email"
                   value={creds.email}
                   onChange={(e)=> setCreds({...creds, email:e.target.value})}
@@ -203,6 +204,7 @@ const SignupPage = () => {
               id="phone"
               label="Phone Number"
               name="phone"
+              type="number"
               autoComplete="phone"
               value={creds.phone}
                   onChange={(e)=> setCreds({...creds, phone:e.target.value})}
