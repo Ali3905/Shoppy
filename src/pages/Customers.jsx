@@ -19,6 +19,7 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import AddIcon from '@mui/icons-material/Add';
+import DeleteIcon from '@mui/icons-material/Delete';
 
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
@@ -27,7 +28,8 @@ import Modal from '@mui/material/Modal';
 
 const Customers = () => {
   const [rfid, setrfid] = useState('')
-  const [modal, setModal] = useState(false)
+  const [balanceModal, setbalanceModal] = useState(false)
+  const [deleteModal, setDeleteModal] = useState(false)
   const [creds, setCreds] = useState({
     balance: ''
   })
@@ -41,7 +43,6 @@ const Customers = () => {
       method: 'get',
       url: `https://bnbdevelopers-test-apis.vercel.app/getAllClient`,
     });
-    console.log(res.data)
     setClients(res.data)
   }
 
@@ -61,7 +62,7 @@ const Customers = () => {
             setCreds({
                 balance : '',
             })
-            setModal(false)
+            setbalanceModal(false)
             await localStorage.setItem("balance", res.data.details.balance)
             toast.success(`Balance added`, {
               position: "top-right",
@@ -88,10 +89,53 @@ const Customers = () => {
       
       
     };
+  const handleDeletesSubmit = async(event) => {
+      event.preventDefault();
+      // let a = await localStorage.getItem("rfid")
+        const res = await axios({
+          method: 'delete',
+          url: `https://bnbdevelopers-test-apis.vercel.app/deleteClient?rfid=${rfid}`,
+          data: {rfid}
+          });
+          console.log(res.data);
+          if(res.data.success === true){
 
-    const handleAdd = (rfid) => {
+            setDeleteModal(false)
+            toast.success(`Client Deleted`, {
+              position: "top-right",
+              autoClose: 1000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+              theme: "colored",
+              });
+          }else{
+            toast.error(`${res.data.msg}`, {
+              position: "top-right",
+              autoClose: 1000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+              theme: "colored",
+              });
+          }
+      
+      
+    };
+
+    const handleAddBalance = (rfid) => {
       setrfid(rfid)
-      setModal(true)
+      setbalanceModal(true)
+    }
+
+    const handleDeleteClient = (rfid) => {
+      setrfid(rfid)
+      console.log(rfid);
+      setDeleteModal(true)
     }
 
   const style = {
@@ -106,7 +150,8 @@ const Customers = () => {
     p: 4,
   };
 
-  const handleClose = () => setModal(false);
+  const handleCloseBalance = () => setbalanceModal(false);
+  const handleCloseDelete = () => setDeleteModal(false);
 
   useEffect(() => {
     if(!localStorage.getItem("token")){
@@ -146,6 +191,7 @@ const Customers = () => {
             <TableCell align="center">Phone</TableCell>
             <TableCell align="center">Balance</TableCell>
             <TableCell align="center">Add Balance</TableCell>
+            <TableCell align="center">Delete</TableCell>
             <TableCell align="center">rfid</TableCell>
           </TableRow>
         </TableHead>
@@ -164,7 +210,8 @@ const Customers = () => {
               <TableCell align="center">{row.email}</TableCell>
               <TableCell align="center">{row.phone}</TableCell>
               <TableCell align="center">{row.balance}</TableCell>
-              <TableCell align="center"><AddIcon onClick={()=>handleAdd(row.rfid)}/></TableCell>
+              <TableCell align="center"><AddIcon onClick={()=>handleAddBalance(row.rfid)}/></TableCell>
+              <TableCell align="center"><DeleteIcon onClick={()=>handleDeleteClient(row.rfid)}/></TableCell>
               <TableCell align="center">{row.rfid}</TableCell>
             </TableRow>
           ))}
@@ -175,8 +222,8 @@ const Customers = () => {
 
     <div>
       <Modal
-        open={modal}
-        onClose={handleClose}
+        open={balanceModal}
+        onClose={handleCloseBalance}
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
       >
@@ -212,6 +259,42 @@ const Customers = () => {
               disabled={creds.balance === '' ? true : false}
             >
              Add Balance
+            </Button>
+        </Box>
+        </Box>
+      </Modal>
+    </div>
+    <div>
+      <Modal
+        open={deleteModal}
+        onClose={handleCloseDelete}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <Box sx={style}>
+        <Typography component="h1" variant="h5">
+           Are sure you want to delete this client ?
+          </Typography>
+         
+          <Box component="form" noValidate onSubmit={handleDeletesSubmit} sx={{ mt: 3 }} display={'flex'} gap={"1rem"}>
+           
+            <Button
+              type="submit"
+              fullWidth
+              variant="contained"
+              sx={{ mt: 3, mb: 2 }}
+              onClick={()=>setDeleteModal(false)}
+            >
+             Cancel
+            </Button>
+            <Button
+              type="submit"
+              fullWidth
+              variant="contained"
+              sx={{ mt: 3, mb: 2 }}
+              className="btn_delete"
+            >
+             Delete
             </Button>
         </Box>
         </Box>

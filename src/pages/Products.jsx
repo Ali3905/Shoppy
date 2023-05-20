@@ -39,6 +39,8 @@ const Products = () => {
   const [openModal, setOpenModal] = useState(false)
   const [quantity, setQuantity] = useState(1)
   const [cart, setCart] = useState([])
+  const [deleteModal, setDeleteModal] = useState(false)
+  const [pid, setpid] = useState('')
   const editing = { allowDeleting: true, allowEditing: true };
   const getAllProducts = async() => {
     // e.preventDefault()
@@ -104,6 +106,52 @@ const Products = () => {
     p: 4,
   };
 
+  const handleDeleteClient = (pid) => {
+    setpid(pid)
+    setDeleteModal(true)
+  } 
+
+  const handleDeletesSubmit = async(event) => {
+    event.preventDefault();
+    // let a = await localStorage.getItem("rfid")
+      const res = await axios({
+        method: 'delete',
+        url: `https://bnbdevelopers-test-apis.vercel.app/deleteProduct?pid=${pid}`,
+        data: {pid}
+        });
+        console.log(res.data);
+        if(res.data.success === true){
+
+          setDeleteModal(false)
+          toast.success(`Product Deleted`, {
+            position: "top-right",
+            autoClose: 1000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "colored",
+            });
+        }else{
+          toast.error(`${res.data.msg}`, {
+            position: "top-right",
+            autoClose: 1000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "colored",
+            });
+        }
+    
+    
+  };
+
+  
+  const handleCloseDelete = () => setDeleteModal(false);
+
 
   var price = 0
   
@@ -157,6 +205,9 @@ const Products = () => {
       <CardActions>
         <Button size="medium" color="primary" className='btn' variant="contained" onClick={()=>handleBtnClicked(i)}>
           Add to Cart 
+        </Button>
+        <Button size="medium" className='btn_delete' variant="contained" onClick={()=>handleDeleteClient(ele.pid)}>
+        Delete
         </Button>
       </CardActions>
     </Card>
@@ -222,6 +273,7 @@ const Products = () => {
         })}>
         Add to Cart
         </Button>
+        
       </CardActions>
     </Card>
         </Box>
@@ -309,6 +361,42 @@ const Products = () => {
         </Button>
       </div>
     </TableContainer> */}
+
+<div>
+      <Modal
+        open={deleteModal}
+        onClose={handleCloseDelete}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <Box sx={style}>
+        <Typography component="h1" variant="h5">
+           Are sure you want to delete this client ?
+          </Typography>
+         
+          <Box component="form" noValidate onSubmit={handleDeletesSubmit} sx={{ mt: 3 }} display={'flex'} gap={"1rem"}>
+           
+            <Button
+              type="submit"
+              fullWidth
+              variant="contained"
+              sx={{ mt: 3, mb: 2 }}
+              onClick={()=>setDeleteModal(false)}
+            >
+             Cancel
+            </Button>
+            <Button
+              type="submit"
+              fullWidth
+              variant="contained"
+              sx={{ mt: 3, mb: 2, bgcolor: "#d50000" }}
+            >
+             Delete
+            </Button>
+        </Box>
+        </Box>
+      </Modal>
+    </div>
     </>
   )
 }
