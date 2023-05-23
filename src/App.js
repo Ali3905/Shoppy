@@ -93,7 +93,6 @@ const App = () => {
                 <Route path="/addproduct" element={localStorage.getItem("role")==="admin"?<AddProduct /> : null}/>
 
                 <Route path="/userDashboard" element={localStorage.getItem("role")==="client"? <UserDashBoardPage /> : null }/>
-                <Route path="/addBalance" element={localStorage.getItem("role")==="client"? <AddBalance /> : null}/>
               
 
               </Routes>

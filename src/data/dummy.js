@@ -510,10 +510,7 @@ export const links = [
         icon: <StoreIcon />,
       },
     ]: [
-      {
-        name: 'addBalance',
-        icon: <AddIcon />,
-      },
+      
     ]
   },
   

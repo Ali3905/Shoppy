@@ -5,6 +5,7 @@ import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
 import { Button, CardActionArea, CardActions, CircularProgress, Box, Modal, MenuItem} from '@mui/material';
+import DeleteIcon from '@mui/icons-material/Delete';
 import { AiOutlinePlus, AiOutlineMinus } from 'react-icons/ai';
 import "../css/products.css"
 import { ordersData, contextMenuItems, ordersGrid } from '../data/dummy';
@@ -36,6 +37,7 @@ const Products = () => {
   const navigate = useNavigate()
   const [products, setProducts] = useState([])
   const [indexOfCard, setIndexOfCard] = useState(0)
+  const [removeModal, setRemoveModal] = useState(false)
   const [openModal, setOpenModal] = useState(false)
   const [quantity, setQuantity] = useState(1)
   const [cart, setCart] = useState([])
@@ -79,7 +81,7 @@ const Products = () => {
       cart.unshift(product)
       setOpenModal(false)
       setQuantity(1)
-      console.log(cart);
+      // console.log(cart);
   }
 
   const handleBtnClicked = (i) => {
@@ -110,6 +112,11 @@ const Products = () => {
     setpid(pid)
     setDeleteModal(true)
   } 
+
+  const handleRemoveProduct = (i) => {
+    cart.splice(i, 1)
+    setRemoveModal(true)
+  }
 
   const handleDeletesSubmit = async(event) => {
     event.preventDefault();
@@ -151,6 +158,7 @@ const Products = () => {
 
   
   const handleCloseDelete = () => setDeleteModal(false);
+  const handleCloseRemove = () => setRemoveModal(false);
 
 
   var price = 0
@@ -164,6 +172,7 @@ const Products = () => {
       navigate("/login")
     }
   }, [])
+
   return (
     <>
     <ToastContainer
@@ -288,11 +297,12 @@ const Products = () => {
                 <TableCell align="left">Picture</TableCell>
                 <TableCell align="center">Price</TableCell>
                 <TableCell align="center">Quantity</TableCell>
+            <TableCell align="center">Delete</TableCell>
                 <TableCell align="center">Total Price</TableCell>
                 </TableRow>
             </TableHead>
             <TableBody>
-                    {cart.map((ele, i)=>{
+                    {cart.length !== 0 &&  cart.map((ele, i)=>{
                       price += ele.productTotalPrice
                            return <TableRow
                             key={i}
@@ -306,6 +316,7 @@ const Products = () => {
                                 </TableCell>
                                 <TableCell align='center'>Rs {ele.productPrice}</TableCell>
                                 <TableCell align='center'>{ele.quantity}</TableCell>
+                                <TableCell align="center"><DeleteIcon onClick={()=>handleRemoveProduct(i)}/></TableCell>
                                 <TableCell align='center'>Rs {ele.productTotalPrice}</TableCell>
                             </TableRow>
                         })
@@ -371,7 +382,7 @@ const Products = () => {
       >
         <Box sx={style}>
         <Typography component="h1" variant="h5">
-           Are sure you want to delete this client ?
+           Are sure you want to delete this product ?
           </Typography>
          
           <Box component="form" noValidate onSubmit={handleDeletesSubmit} sx={{ mt: 3 }} display={'flex'} gap={"1rem"}>
@@ -393,6 +404,34 @@ const Products = () => {
             >
              Delete
             </Button>
+        </Box>
+        </Box>
+      </Modal>
+    </div>
+<div>
+      <Modal
+        open={removeModal}
+        onClose={handleCloseRemove}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <Box sx={style}>
+        <Typography component="h1" variant="h5">
+           Item has been removed from cart
+          </Typography>
+         
+          <Box component="form" noValidate onSubmit={handleDeletesSubmit} sx={{ mt: 3 }} display={'flex'} gap={"1rem"}>
+           
+            <Button
+              type="submit"
+              fullWidth
+              variant="contained"
+              sx={{ mt: 3, mb: 2 }}
+              onClick={()=>setRemoveModal(false)}
+            >
+             Ok
+            </Button>
+            
         </Box>
         </Box>
       </Modal>

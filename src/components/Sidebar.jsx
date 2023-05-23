@@ -42,7 +42,7 @@ const Sidebar = () => {
             {links.map((item) => (
               <div key={item.title}>
                 <p className="text-gray-400 dark:text-gray-400 m-3 mt-4 uppercase">
-                  {item.title}
+                  {item.links.length !== 0 ? item.title : null}
                 </p>
                {item !== null && item.links.map((link) => (
                   <NavLink
