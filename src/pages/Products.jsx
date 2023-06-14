@@ -60,7 +60,11 @@ const Products = () => {
    const res = await axios({
       method: 'post',
       url: `https://bnbdevelopers-test-apis.vercel.app/handlePayment`,
-      data: { total_amount: price }
+      data: { 
+        total_amount: price,
+        adminName : localStorage.getItem("usrnme"),
+        productList : cart,
+       }
     });
     console.log(res.data)
     price = 0

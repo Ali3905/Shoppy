@@ -74,6 +74,7 @@ const Customers = () => {
               progress: undefined,
               theme: "colored",
               });
+              getAllClients()
           }else{
             toast.error(`${res.data.msg}`, {
               position: "top-right",
@@ -111,6 +112,7 @@ const Customers = () => {
               progress: undefined,
               theme: "colored",
               });
+              getAllClients()
           }else{
             toast.error(`${res.data.msg}`, {
               position: "top-right",

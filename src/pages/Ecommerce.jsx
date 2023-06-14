@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { BsCurrencyDollar } from 'react-icons/bs';
 import { GoPrimitiveDot } from 'react-icons/go';
 import { IoIosMore } from 'react-icons/io';
@@ -9,6 +9,7 @@ import { earningData, medicalproBranding, recentTransactions, weeklyStats, dropd
 import { useStateContext } from '../contexts/ContextProvider';
 import product9 from '../data/product9.jpg';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 const DropDown = ({ currentMode }) => (
   <div className="w-28 border-1 border-color px-2 py-1 rounded-md">
@@ -19,20 +20,36 @@ const DropDown = ({ currentMode }) => (
 const Ecommerce = () => {
   const navigate = useNavigate()
   const { currentColor, currentMode } = useStateContext();
+  const [adminDetails, setAdminDetails] = useState({})
+
+  const getAdminDetails = async() => {
+    const usrnme = localStorage.getItem("usrnme")
+    const res = await axios({
+      method: 'get',
+      url: `https://bnbdevelopers-test-apis.vercel.app/getAdminDetails?usrnme=${usrnme}`,
+    });
+    console.log(res.data)
+    if (res.data.isSuccess === "True") {
+      setAdminDetails(res.data.details)
+    }
+  }
 
   useEffect(() => {
     if(!localStorage.getItem("token")){
       navigate("/login")
+    }else{
+      getAdminDetails()
     }
   }, [])
   return (
     <div className="mt-24">
-      <div className="flex flex-wrap lg:flex-nowrap justify-center ">
+      
+     <div className="flex flex-wrap lg:flex-nowrap justify-center ">
         <div className="bg-white dark:text-gray-200 dark:bg-secondary-dark-bg h-44 rounded-xl w-full lg:w-80 p-8 pt-9 m-3 bg-hero-pattern bg-no-repeat bg-cover bg-center">
-          <div className="flex justify-between items-center">
+          <div className="flex flex-col-reverse justify-between items-start">
             <div>
+              <p className="text-2xl">Rs {adminDetails.total_earning}</p>
               <p className="font-bold text-gray-400">Earnings</p>
-              <p className="text-2xl">Rs 63,448.7</p>
             </div>
             <button
               type="button"
@@ -42,17 +59,17 @@ const Ecommerce = () => {
               <BsCurrencyDollar />
             </button>
           </div>
-          <div className="mt-6">
+          {/* <div className="mt-6">
             <Button
               color="white"
               bgColor={currentColor}
               text="Download"
               borderRadius="10px"
             />
-          </div>
+          </div> */}
         </div>
         <div className="flex m-3 flex-wrap justify-center gap-1 items-center">
-          {earningData.map((item) => (
+          {earningData.map((item,i) => (
             <div key={item.title} className="bg-white h-44 dark:text-gray-200 dark:bg-secondary-dark-bg md:w-56  p-4 pt-9 rounded-2xl ">
               <button
                 type="button"
@@ -62,10 +79,8 @@ const Ecommerce = () => {
                 {item.icon}
               </button>
               <p className="mt-3">
-                <span className="text-lg font-semibold">{item.amount}</span>
-                <span className={`text-sm text-Rs {item.pcColor} ml-2`}>
-                  {item.percentage}
-                </span>
+                <span className="text-lg font-semibold">{i===0? adminDetails.total_customers: adminDetails.total_products}</span>
+                
               </p>
               <p className="text-sm text-gray-400  mt-1">{item.title}</p>
             </div>
@@ -73,7 +88,7 @@ const Ecommerce = () => {
         </div>
       </div>
 
-      <div className="flex gap-10 flex-wrap justify-center">
+      {/* <div className="flex gap-10 flex-wrap justify-center">
         <div className="bg-white dark:text-gray-200 dark:bg-secondary-dark-bg m-3 p-4 rounded-2xl md:w-780  ">
           <div className="flex justify-between">
             <p className="font-semibold text-xl">Revenue Updates</p>
@@ -332,7 +347,7 @@ const Ecommerce = () => {
             </div>
           </div>
         </div>
-      </div>
+      </div> */}
     </div>
   );
 };

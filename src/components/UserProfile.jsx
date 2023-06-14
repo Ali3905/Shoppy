@@ -24,6 +24,7 @@ const UserProfile = () => {
     localStorage.removeItem("email")
     localStorage.removeItem("role")
   localStorage.removeItem("pic_url")
+  localStorage.removeItem("usrnme")
     navigate("/login");
   };
 
