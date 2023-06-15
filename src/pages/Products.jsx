@@ -20,6 +20,10 @@ import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import { ToastContainer, toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
+import AddIcon from '@mui/icons-material/Add';
+import { Input } from '@mui/material';
+// import Input from '@mui/joy/Input';
+
 
 function createData(name, calories, fat, carbs, protein) {
   return { name, calories, fat, carbs, protein };
@@ -39,6 +43,11 @@ const Products = () => {
   const [indexOfCard, setIndexOfCard] = useState(0)
   const [removeModal, setRemoveModal] = useState(false)
   const [openModal, setOpenModal] = useState(false)
+  const [openCustom, setOpenCustom] = useState(false)
+  const [custom, setCustom] = useState({
+    name: "",
+    price: 0,
+  })
   const [quantity, setQuantity] = useState(1)
   const [cart, setCart] = useState([])
   const [deleteModal, setDeleteModal] = useState(false)
@@ -84,6 +93,7 @@ const Products = () => {
   const handleAddToCart = async(product) => {
       cart.unshift(product)
       setOpenModal(false)
+      setOpenCustom(false)
       setQuantity(1)
       // console.log(cart);
   }
@@ -96,6 +106,9 @@ const Products = () => {
   const handleClose = () => {
     setOpenModal(false)
     setQuantity(1)
+  };
+  const closeCustom = () => {
+    setOpenCustom(false)
   };
   const add = () => setQuantity(quantity + 1)
   const minus = () => setQuantity(quantity - 1)
@@ -121,6 +134,31 @@ const Products = () => {
     cart.splice(i, 1)
     setRemoveModal(true)
   }
+
+  const handleDeleteOrder = async() => {
+    const res = await axios({
+       method: 'post',
+       url: `https://bnbdevelopers-test-apis.vercel.app/handlePayment`,
+       data: { 
+         total_amount: 0,
+         adminName : localStorage.getItem("usrnme"),
+         productList : [],
+        }
+     });
+     console.log(res.data)
+     price = 0
+     toast.success('Order Deleted', {
+           position: "top-right",
+           autoClose: 3000,
+           hideProgressBar: false,
+           closeOnClick: true,
+           pauseOnHover: true,
+           draggable: true,
+           progress: undefined,
+           theme: "colored",
+           });
+     setCart([])
+   }
 
   const handleDeletesSubmit = async(event) => {
     event.preventDefault();
@@ -196,7 +234,22 @@ const Products = () => {
     {products.length === 0 &&  <CircularProgress />}
     </div>
     <div className="card_container">
-
+    <Card sx={{ maxWidth: 345, display: 'flex', flexDirection: 'column', alignItems: 'center', padding: "2rem 0rem", margin: "1rem 1rem" }} onClick={()=>setOpenCustom(true)}>
+      <CardActionArea>
+        <CardContent sx={{ maxWidth: 345, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: "1rem", padding: "2rem 0rem", margin: "1rem 1rem" }}>
+          <AddIcon sx={{fontSize: "10rem", borderRadius: "100px", bgcolor: "#ebe9e9"}}/>
+          <Typography gutterBottom variant="h4" component="div" textAlign={'center'}>
+            Custom
+          </Typography>
+          
+          {/* <Typography variant="body1" color="text.secondary">
+            Lizards are a widespread group of squamate reptiles, with over 6,000
+            species, ranging across all continents except Antarctica
+          </Typography> */}
+        </CardContent>
+      </CardActionArea>
+     
+    </Card>
     {products.length !== 0 &&  products.map((ele, i)=>{
 
      return <Card sx={{ maxWidth: 345, display: 'flex', flexDirection: 'column', alignItems: 'center', padding: "2rem 0rem", margin: "1rem 1rem" }} key={i}>
@@ -227,6 +280,86 @@ const Products = () => {
     })
   }
   </div>
+  {openCustom && <Modal
+        open={openCustom}
+        onClose={closeCustom}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <Box sx={style}>
+        <Card sx={{ maxWidth: 345, display: 'flex', flexDirection: 'column', alignItems: 'center', padding: "2rem 0rem", margin: "1rem 1rem" }}>
+      <CardActionArea>
+        {/* <img src={products[indexOfCard].pic_url} alt="" className='card_img'/> */}
+        <CardContent>
+      <Input 
+      placeholder="Product Name" 
+      variant="plain"
+      type='text'
+      sx={{width:"100%"}}
+      onChange={(e)=>setCustom({...custom, name: e.target.value})}
+       />
+      <Input 
+      placeholder="Price" 
+      variant="plain"
+      type='number'
+      sx={{width:"100%", marginTop: "1rem"}}
+      onChange={(e)=>setCustom({...custom, price: e.target.value})}
+      
+       />
+          {/* <Typography gutterBottom variant="h4" component="div" textAlign={'center'}>
+            {products[indexOfCard].productName}
+          </Typography>
+          <Typography gutterBottom variant="h5" component="div" textAlign={'center'}>
+            Rs {products[indexOfCard].productPrice}
+          </Typography> */}
+      {/* <FormControl fullWidth>
+        <InputLabel id="demo-simple-select-label">Age</InputLabel>
+        <Select
+          labelId="demo-simple-select-label"
+          id="demo-simple-select"
+          value={age}
+          label="Age"
+          onChange={handleChange}
+        >
+          <MenuItem value={10}>Ten</MenuItem>
+          <MenuItem value={20}>Twenty</MenuItem>
+          <MenuItem value={30}>Thirty</MenuItem>
+        </Select>
+      </FormControl> */}
+     
+        </CardContent>
+      </CardActionArea>
+      <CardActions sx={{display: "flex", flexDirection: "column"}}>
+      <div className="flex items-center border-1 border-r-0 border-color rounded">
+          <p className="p-2 border-r-1 dark:border-gray-600 border-color text-red-600 "><AiOutlineMinus onClick={minus}/></p>
+          <p className="p-2 border-r-1 border-color dark:border-gray-600 text-green-600">{quantity}</p>
+          <p className="p-2 border-r-1 border-color dark:border-gray-600 text-green-600"><AiOutlinePlus onClick={add}/></p>
+        </div>
+      <div className="flex items-center border-1 border-r-0 border-color rounded">
+      <Typography gutterBottom variant="h5" component="div" textAlign={'center'}>
+            Total Price
+          </Typography> 
+        </div>
+        <div>
+        <Typography gutterBottom variant="h5" component="div" textAlign={'center'}>
+        Rs {custom.price * quantity}
+          </Typography>
+          </div>
+        <Button size="medium" color="primary" className='btn' variant="contained" onClick={()=>handleAddToCart({
+          pic_url: '',
+          productName: custom.name,
+          productPrice: custom.price,
+          productTotalPrice: custom.price * quantity,
+          quantity: quantity, 
+        })}>
+        Add to Cart
+        </Button>
+        
+      </CardActions>
+    </Card>
+        </Box>
+      </Modal>}
+
   {openModal && <Modal
         open={openModal}
         onClose={handleClose}
@@ -291,6 +424,8 @@ const Products = () => {
     </Card>
         </Box>
       </Modal>}
+
+
      {cart.length !== 0 && <div>
      <h2 className='ml-2'>Cart</h2>
     <TableContainer component={Paper}>
@@ -316,7 +451,7 @@ const Products = () => {
                                 
                                 <TableCell align='left'>{ele.productName}</TableCell>
                                 <TableCell align='left'>
-                                  <img src={ele.pic_url} alt="product" className='table_img'/>
+                                  { ele.pic_url? <img src={ele.pic_url} alt="product" className='table_img'/> : "No image to Show"}
                                 </TableCell>
                                 <TableCell align='center'>Rs {ele.productPrice}</TableCell>
                                 <TableCell align='center'>{ele.quantity}</TableCell>
@@ -337,7 +472,7 @@ const Products = () => {
       </div>
     </TableContainer>
      </div>}
-
+  <Button size="medium"  className='btn_delete ml-2' variant="contained" onClick={handleDeleteOrder}>Delete Previous Order</Button>
       {/* <TableContainer component={Paper}>
       <Table sx={{ minWidth: 650 }} aria-label="simple table">
         <TableHead>
