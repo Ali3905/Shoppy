@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import axios from 'axios';
 // import { GridComponent, ColumnsDirective, ColumnDirective, Page, Selection, Inject, Edit, Toolbar, Sort, Filter } from '@syncfusion/ej2-react-grids';
 import { CircularProgress } from '@mui/material';
@@ -34,6 +34,7 @@ const Customers = () => {
     balance: ''
   })
   const [clients, setClients] = useState([])
+  const [newClients, setNewClients] = useState([])
   const navigate = useNavigate()
   const selectionsettings = { persistSelection: true };
   const toolbarOptions = ['Delete'];
@@ -44,7 +45,10 @@ const Customers = () => {
       url: `https://bnbdevelopers-test-apis.vercel.app/getAllClient`,
     });
     setClients(res.data)
+    console.log(12)
   }
+
+  // const Clients = useMemo(()=> setNewClients(clients),[])
 
   // const theme = createTheme();
   const handleSubmit = async(event) => {
@@ -163,6 +167,9 @@ const Customers = () => {
 
   useEffect(() => {
     getAllClients()
+    setInterval(() => {
+      getAllClients()
+    }, 2000);
   }, [])
 
   return (
