@@ -63,6 +63,7 @@ const SignupPage = () => {
               await localStorage.setItem("name", res.data.details.usrnme)
               await localStorage.setItem("email", res.data.details.email)
               await localStorage.setItem("pic_url", res.data.details.pic_url)
+              await localStorage.setItem("usrnme", res.data.details.usrnme)
               navigate('/userDashboard')
               window.location.reload();
             }else{
