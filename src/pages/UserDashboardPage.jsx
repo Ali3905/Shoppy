@@ -30,7 +30,7 @@ const UserDashboardPage = () => {
    })  
    setOrderList(res.data.purchase)
    setBalance(res.data.balance)
-   console.log(res.data)
+  //  console.log(res.data)
   }
 
   useEffect(() => {
@@ -39,6 +39,9 @@ const UserDashboardPage = () => {
     }else{
       getOrderListClient()
     }
+    setInterval(() => {
+      getOrderListClient()
+    }, 2000);
   }, [])
     return (
         <>
@@ -47,7 +50,7 @@ const UserDashboardPage = () => {
           {/* <Sidebar/> */}
           <div className='left_container'>
                 <div className='card_container1'>
-                <CardElement  sx={{backgroundColor: "##acffac"}} total={"Total Deposit"} total_deposit={balance} img={<img src="/img/img2.png" alt="" />}/>
+                <CardElement  sx={{backgroundColor: "##acffac"}} total={"Current Balance"} total_deposit={balance} img={<img src="/img/img2.png" alt="" />}/>
                 {/* <CardElement  sx={{backgroundColor: "##acffac"}} total={"Spent"} total_deposit={500} img={<LocalAtmIcon sx={{backgroundColor: "##acffac", color: "green"}} className='card_icon'/>}/>
                 <CardElement  sx={{backgroundColor: "##acffac"}} total={"Remaining"} total_deposit={500} img={<AccountBalanceWalletIcon sx={{backgroundColor: "#a6a6ff" , color: "blue"}} className='card_icon'/>}/> */}
                 </div>   
