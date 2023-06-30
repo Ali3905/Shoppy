@@ -64,6 +64,19 @@ const Products = () => {
     setProducts(res.data)
   }
 
+  const sendMail = async(orderPrice) => {
+    const res = await axios({
+      method: 'post',
+      url: 'http://localhost:8000/api/sendMail',
+      data: {
+        userMail: localStorage.getItem("email"),
+        userName: localStorage.getItem("usrnme"),
+        orderWorth: orderPrice
+      }
+    })
+    console.log(res)
+  }
+
 
   const handleBuy = async() => {
    const res = await axios({
@@ -88,6 +101,7 @@ const Products = () => {
           theme: "colored",
           });
     setCart([])
+    sendMail(res.data.total_amount)
   }
 
   const handleAddToCart = async(product) => {
