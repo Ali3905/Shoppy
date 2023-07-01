@@ -477,7 +477,7 @@ export const links = [
     title: 'Dashboard',
     links: [
       localStorage.getItem("role")==="admin"?{
-        name: 'ecommerce',
+        name: 'OC Stall',
         icon: <FiShoppingBag />,
       }:  {
         name: 'userDashboard',
