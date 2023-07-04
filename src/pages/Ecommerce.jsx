@@ -50,8 +50,32 @@ const Ecommerce = () => {
       setAdminDetails(res.data.details)
     }
   }
+  const issufficient = async() => {
+    const usrnme = localStorage.getItem("usrnme")
+    const res = await axios({
+      method: "get",
+      url: `https://bnbdevelopers-test-apis.vercel.app/get_issufficient?adminName=${usrnme}`
+    })
+    console.log(res.data.isSufficient)
+    if(res.data.isSufficient === 0){
+      setBalance(true)
+    }else{
+      setBalance(false)
+    }
+  }
+
+  const set_BalanceSufficient = async() => {
+    const usrnme = localStorage.getItem("usrnme")
+    const res = await axios({
+      method: "get",
+      url: `https://bnbdevelopers-test-apis.vercel.app/set_issufficient?adminName=${usrnme}`
+    })
+    console.log(res.data)
+    
+  }
 
   const handleBalanceSubmit = () => {
+    set_BalanceSufficient()
     setBalance(false)
   }
 
@@ -68,13 +92,14 @@ const Ecommerce = () => {
   }, [])
 
   useEffect(() => {
+    setInterval(() => {
+      issufficient()
     if(balance){
-      setInterval(() => {
         setBalance(true)
         console.log("hlo");
-      }, 3000);
-
-    }
+        
+      }
+    }, 3000);
   },[])
   return (
     <div className="mt-24">
