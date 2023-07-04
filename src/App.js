@@ -81,7 +81,7 @@ const App = () => {
               <Routes>
                 {/* dashboard  */}
                 {<Route path="/" element={localStorage.getItem("role")==="admin"?<Ecommerce /> : <UserDashBoardPage /> } />}
-                <Route path="/ecommerce" element={localStorage.getItem("role")==="admin"?<Ecommerce /> : null} />
+                <Route path="/oc-stall" element={localStorage.getItem("role")==="admin"?<Ecommerce /> : null} />
 
                 {/* pages  */}
                 <Route path="/orders" element={localStorage.getItem("role")==="admin"?<Orders /> : null} />
