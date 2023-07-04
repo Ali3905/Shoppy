@@ -58,7 +58,7 @@ const Ecommerce = () => {
       method: "get",
       url: `https://bnbdevelopers-test-apis.vercel.app/get_issufficient?adminName=${usrnme}`
     })
-    console.log(res.data.isSufficient)
+    // console.log(res.data.isSufficient)
     if(res.data.isSufficient === 0){
       setBalance(true)
     }else{
@@ -72,7 +72,7 @@ const Ecommerce = () => {
       method: "get",
       url: `https://bnbdevelopers-test-apis.vercel.app/set_issufficient?adminName=${usrnme}`
     })
-    console.log(res.data)
+    // console.log(res.data)
     
   }
 
