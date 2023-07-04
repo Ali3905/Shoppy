@@ -15,6 +15,8 @@ import axios from 'axios';
 import Typography from '@mui/material/Typography';
 import { Button, Box, Modal} from '@mui/material';
 
+import { ToastContainer, toast } from 'react-toastify';
+
 const DropDown = ({ currentMode }) => (
   <div className="w-28 border-1 border-color px-2 py-1 rounded-md">
     <DropDownListComponent id="time" fields={{ text: 'Time', value: 'Id' }} style={{ border: 'none', color: (currentMode === 'Dark') && 'white' }} value="1" dataSource={dropdownData} popupHeight="220px" popupWidth="120px" />
@@ -83,6 +85,24 @@ const Ecommerce = () => {
     setBalance(false)
   }
 
+  const handleSheetsSubmit = async() => {
+    const res = await axios({
+      method: "get",
+      url: `https://bnbdevelopers-test-apis.vercel.app/getOrderListClient_to_sheet`
+    })
+    console.log(res.data)
+    toast.success('Data Updated SuccessFully', {
+      position: "top-right",
+      autoClose: 3000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "colored",
+      });
+  }
+
   useEffect(() => {
     if(!localStorage.getItem("token")){
       navigate("/login")
@@ -103,6 +123,18 @@ const Ecommerce = () => {
   },[])
   return (
     <div className="mt-24">
+       <ToastContainer
+      position="top-right"
+      autoClose={3000}
+      hideProgressBar={false}
+      newestOnTop={false}
+      closeOnClick
+      rtl={false}
+      pauseOnFocusLoss
+      draggable
+      pauseOnHover
+      theme="colored"
+      />
       
      <div className="flex flex-wrap lg:flex-nowrap justify-center ">
         <div className="bg-white dark:text-gray-200 dark:bg-secondary-dark-bg h-44 rounded-xl w-full lg:w-80 p-8 pt-9 m-3 bg-hero-pattern bg-no-repeat bg-cover bg-center">
@@ -149,6 +181,14 @@ const Ecommerce = () => {
       </div>
 
       <div>
+      <Button
+              fullWidth
+              variant="contained"
+              sx={{ my: 3, mx: 25, width: "50%" }}
+              onClick={handleSheetsSubmit}
+            >
+             Update Data on Sheets
+            </Button>
       <Modal
         open={balance}
         onClose={handleClosebalance}
