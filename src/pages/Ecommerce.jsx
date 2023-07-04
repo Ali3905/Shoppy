@@ -177,18 +177,18 @@ const Ecommerce = () => {
               <p className="text-sm text-gray-400  mt-1">{item.title}</p>
             </div>
           ))}
-        </div>
-      </div>
-
-      <div>
       <Button
               fullWidth
               variant="contained"
-              sx={{ my: 3, mx: 25, width: "50%" }}
+              sx={{ my: 3, width: "50%", }}
               onClick={handleSheetsSubmit}
             >
              Update Data on Sheets
             </Button>
+        </div>
+      </div>
+
+      <div>
       <Modal
         open={balance}
         onClose={handleClosebalance}
